@@ -201,7 +201,7 @@ with tab1:
                     height=400,
                     xaxis_tickangle=-45
                 )
-                st.plotly_chart(fig, width='stretch', config={'displayModeBar': False})
+                st.plotly_chart(fig, config={'displayModeBar': False})
             else:
                 st.info("No maturity data available")
         
@@ -216,7 +216,7 @@ with tab1:
                     font_color='white',
                     height=400
                 )
-                st.plotly_chart(fig, width='stretch', config={'displayModeBar': False})
+                st.plotly_chart(fig, config={'displayModeBar': False})
             else:
                 st.info("No timeline data available")
         
@@ -388,7 +388,7 @@ with tab3:
                 font_color='white',
                 height=500
             )
-            st.plotly_chart(fig, width='stretch', config={'displayModeBar': False})
+            st.plotly_chart(fig, config={'displayModeBar': False})
 
 # TAB 4: MISSION PLANNER
 with tab4:
@@ -441,7 +441,7 @@ with tab4:
             font_color='white',
             height=600
         )
-        st.plotly_chart(fig, width='stretch', config={'displayModeBar': False})
+        st.plotly_chart(fig, config={'displayModeBar': False})
 
 # TAB 5: KNOWLEDGE GRAPH
 with tab5:
@@ -477,6 +477,6 @@ with tab5:
         if central:
             central_df = pd.DataFrame(central, columns=['Concept', 'Centrality Score'])
             central_df['Centrality Score'] = central_df['Centrality Score'].round(3)
-            st.dataframe(central_df, width='stretch')
+            st.dataframe(central_df)
         else:
             st.info("No central concepts identified")
