@@ -270,9 +270,23 @@ with tab2:
                 placeholder="e.g., 'bone density Mars mission', 'plant growth microgravity'"
             )
         with col2:
-            organism_filter = st.selectbox("Organism", organisms)
+            organism_filter = st.selectbox("Organism", organisms, key="search_organism")
         with col3:
-            mission_filter = st.selectbox("Mission", missions)
+            mission_filter = st.selectbox("Mission", missions, key="search_mission")
+        
+        # Add year filter in search tab (only if there's a range)
+        if year_range and year_range[0] < year_range[1]:
+            year_filter = st.slider(
+                "Filter by Year Range",
+                min_value=year_range[0],
+                max_value=year_range[1],
+                value=year_range,
+                key="search_year"
+            )
+        else:
+            year_filter = None
+            if year_range:
+                st.info(f"All publications are from {year_range[0]}")
         
         # Perform search
         if search_query and search_engine:
@@ -285,13 +299,16 @@ with tab2:
                     results = results[results['organism'] == organism_filter]
                 if mission_filter != 'All' and 'missionType' in results.columns:
                     results = results[results['missionType'] == mission_filter]
+                if year_filter and 'year' in results.columns:
+                    results = results[(results['year'] >= year_filter[0]) & (results['year'] <= year_filter[1])]
         else:
             # Show all publications with filters
             loader = DataLoader()
             results = loader.filter_publications(
                 publications_df,
                 organism=organism_filter,
-                mission=mission_filter
+                mission=mission_filter,
+                year_range=year_filter
             )
         
         st.info(f"Found {len(results)} publications")
@@ -468,7 +485,7 @@ with tab5:
         
         # Visualize graph
         fig = kg.create_interactive_plot(width=1000, height=700)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, config={'displayModeBar': False})
         
         # Central concepts
         st.subheader("🎯 Most Central Research Concepts")
